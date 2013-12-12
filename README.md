@@ -59,8 +59,8 @@ bundle exec rake spec
 ```
 
 ## TODO
-* Implement mocks for HTTP responses
-* Finish testing 
+* Implement mocks for test HTTP responses
+* Finish testing implementation
 
 ## Contributing
 
