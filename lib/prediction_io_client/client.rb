@@ -3,12 +3,17 @@ module FM
   module PredictionIO
     
     class Client
+      
       def initialize(app_key, api_url="http://localhost:8000", api_version='')
         @app_key = app_key
         @api_url = api_url
         @api_version = api_version
         @api_format = 'json'
         @http = Connection.new(@api_url, @api_format, @api_version)
+      end
+      
+      def identify(uid)
+        @uid = uid
       end
       
       def get_status
@@ -19,7 +24,7 @@ module FM
         params.merge!(default_params)
         params['pio_uid'] = uid
         extract_latlng(params)
-        @http.post(:users, params)
+        @http.post(:users, params).body
       end
   
       def get_user(uid)
@@ -55,9 +60,9 @@ module FM
       
       # Options: pio_uid, pio_n, pio_itypes, pio_latitude, pio_longitude, pio_within, pio_unit
       # Should probably reject others!
-      def get_itemrec_top_n(engine, uid, n, params={})
+      def get_itemrec_top_n(engine, n, params={})
         params.merge!(default_params)
-        params['pio_uid'] = uid
+        params['pio_uid'] = @uid
         params['pio_n'] = n
         format_itypes(itypes, params)
         extract_latlng(params)
@@ -65,11 +70,9 @@ module FM
         @http.get(:engines, :itemrec, engine, :topn, params).body
       end
       
-      def get_itemsim_top_n(engine, uid, n, params)
+      def get_itemsim_top_n(engine, n, params)
         params.merge!(default_params)
-        params['pio_uid'] = uid
-        params['pio_n'] = n
-        params['pio_uid'] = uid
+        params['pio_uid'] = @uid
         params['pio_n'] = n
         format_itypes(itypes, params)
         extract_latlng(params)
@@ -77,10 +80,10 @@ module FM
         @http.get(:engines, :itemsim, engine, :topn, params).body
       end
       
-      def record_action_on_item(action, uid, iid, params={})
+      def record_action_on_item(action, iid, params={})
         params.merge!(default_params)
         params['action'] = action
-        params['pio_uid'] = uid
+        params['pio_uid'] = @uid
         params['pio_iid'] = iid
         params["pio_t"] = ((params["pio_t"].to_r) * 1000).round(0).to_s if params["pio_t"]
         extract_latlng(params)
@@ -115,11 +118,6 @@ module FM
         {
           "pio_appkey" => @app_key
         }
-      end
-      
-      def versioned_path(path)
-        #disabled for now
-        path
       end
       
     end

@@ -31,7 +31,7 @@ module FM
         params = args.extract_options!
         @connection.post do |req|
           req.url versioned_path(args)
-          req.body = params.to_json
+          req.body = params
         end
       end
       
@@ -40,7 +40,7 @@ module FM
         params = args.extract_options!
         @connection.delete do |req|
           req.url versioned_path(args)
-          req.body = params.to_json
+          req.body = params
         end
       end
       
@@ -54,7 +54,7 @@ module FM
       
       def setup_connection
         Faraday.new(:url => @api_url) do |connection|
-          connection.request :url_encoded
+          #connection.request :url_encoded
           connection.request  :json
           
           connection.response :logger
