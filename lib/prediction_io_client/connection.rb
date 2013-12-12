@@ -7,6 +7,8 @@ module FM
       require 'faraday'
       require 'faraday_middleware'
       require 'active_support/core_ext/array'
+      
+      @@debug = false
             
       attr_accessor :connection
       
@@ -57,13 +59,17 @@ module FM
           #connection.request :url_encoded
           connection.request  :json
           
-          connection.response :logger
+          connection.response :logger if debug?
           connection.response :raise_error
           connection.response :json, :content_type => /\bjson$/
           
           connection.use :instrumentation
           connection.adapter Faraday.default_adapter
         end
+      end
+      
+      def debug?
+        @@debug
       end
         
       
