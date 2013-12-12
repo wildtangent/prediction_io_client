@@ -1,6 +1,6 @@
 # PredictionIoClient
 
-TODO: Write a gem description
+Re-work of the Prediction.IO Client library using more Ruby-friendly syntax and Faraday library for HTTP
 
 ## Installation
 
@@ -18,7 +18,49 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+# Get some users and items from your own Database
+uid = User.find(1).id
+iid = Camera.find(155).id
+
+# Create a new client
+predictor = FM::PredictionIO::Client.new(api_key, api_url)
+
+# Add the user and item to the prediction engine
+predictor.add_user(uid)
+predictor.add_item(iid, 'camera')
+
+# Record user behaviour
+# TODO....
+
+# Get 10 recommendation by item recommendation
+predictor.identify(uid)
+predictor.get_itemrec_top_n(iid, 10)
+
+# Get 10 recommendations by item similarity
+predictor.identify(uid)
+predictor.get_itemsim_top_n(iid, 10)
+```
+
+
+## Running Tests
+
+First create a `config.yml` in the root of the gem as follows:
+Note the tests run against a live server at present.
+
+```
+api_url: "http://yourpredictionioserver.com:8000"
+api_key: "yourpredictionioserverkey"
+```
+
+Then run the specs
+```
+bundle exec rake spec
+```
+
+## TODO
+* Implement mocks for HTTP responses
+* Finish testing 
 
 ## Contributing
 
