@@ -105,7 +105,7 @@ module FM
       
       def record_action_on_item(action, iid, params={})
         params.merge!(default_params)
-        params['action'] = action
+        params['pio_action'] = action
         params['pio_uid'] = @uid
         params['pio_iid'] = iid
         params["pio_t"] = ((params["pio_t"].to_r) * 1000).round(0).to_s if params["pio_t"]

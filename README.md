@@ -33,13 +33,16 @@ predictor.add_item(iid, 'camera')
 # Record user behaviour
 # TODO....
 
+# Your engine is the name of your recommendation engine in Prediction.IO
+engine = "awesome-predictor"
+
 # Get 10 recommendation by item recommendation
 predictor.identify(uid)
-predictor.get_itemrec_top_n(iid, 10)
+predictor.get_itemrec_top_n(engine, iid, 10)
 
 # Get 10 recommendations by item similarity
 predictor.identify(uid)
-predictor.get_itemsim_top_n(iid, 10)
+predictor.get_itemsim_top_n(engine, iid, 10)
 ```
 
 

@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'yaml'
+require 'active_support/all'
 
 describe FM::PredictionIO::Client do
   
@@ -111,7 +112,45 @@ describe FM::PredictionIO::Client do
     end
   end
   
-  
-  
-  
+  context 'record user action on an item' do
+    
+    before :each do
+      client.create_user(uid)
+      client.create_item(iid, 'camera')
+    end
+    
+    after :each do
+      client.delete_user(uid)
+      client.delete_item(iid)
+    end
+    
+    it 'should record an action' do
+      client.identify(uid)
+      client.record_action_on_item('view', iid).should eq({
+        "message" => 'Action view recorded.'
+      })
+    end
+    
+    it 'should record an action with a specific timestamp' do
+      client.identify(uid)
+      client.record_action_on_item("view", iid, 'pio_t' => 1.month.ago).should eq({
+        "message" => "Action view recorded."
+      })
+    end
+    
+    it 'should record a rating on an item' do
+      client.identify(uid)
+      client.record_action_on_item("rate", iid, "pio_rate" => 3).should eq({
+        "message" => "Action rate recorded."
+      })
+    end
+    
+    it 'should record an action with a latitude and longitude' do
+      client.identify(uid)
+      client.record_action_on_item("like", iid, "pio_latitude" => 51.4, "pio_longitude" => 23.4).should eq({
+        "message" => "Action like recorded."
+      })
+    end
+  end
+
 end
