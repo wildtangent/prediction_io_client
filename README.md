@@ -1,20 +1,27 @@
-# PredictionIoClient
+# Prediction.IO Client
 
-Re-work of the Prediction.IO Client library using more Ruby-friendly syntax and Faraday library for HTTP
+Re-work of the Prediction.IO Client library using more Ruby-friendly syntax and Faraday library for HTTP.
+Could easily be adapted to support non-blocking requests using EventMachine adapter for Faraday
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'prediction_io_client'
+```ruby
+gem 'prediction_io_client'
+```
 
 And then execute:
 
-    $ bundle
+```shell
+$ bundle
+```
 
 Or install it yourself as:
 
-    $ gem install prediction_io_client
+```shell
+$ gem install prediction_io_client
+```
 
 ## Usage
 
