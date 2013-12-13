@@ -48,12 +48,15 @@ module FM
       
       
       private
+      
+      # Build up the API request path from the parts
       def versioned_path(args)
         return args.first if args == ['/']
         path = args.flatten.join("/")
         [path, @api_format].join(".")
       end
       
+      # Set up Faraday with the appropriate middlewares
       def setup_connection
         Faraday.new(:url => @api_url) do |connection|
           #connection.request :url_encoded
@@ -68,6 +71,7 @@ module FM
         end
       end
       
+      # Whether to perform debug logging on the connection object
       def debug?
         @@debug
       end
