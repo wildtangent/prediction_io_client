@@ -85,20 +85,22 @@ module FM
         params.merge!(default_params)
         params['pio_uid'] = @uid
         params['pio_n'] = n
+        itypes = params.delete("pio_itypes")
         format_itypes(itypes, params)
         extract_latlng(params)
-        extract_startend(params)
+        #extract_startend(params)
         response = @connection.get(:engines, :itemrec, engine, :topn, params)
         response.body["pio_iids"]
       end
       
-      def get_itemsim_top_n(engine, n, params)
+      def get_itemsim_top_n(engine, iid, n, params={})
         params.merge!(default_params)
-        params['pio_uid'] = @uid
+        params['pio_iid'] = iid
         params['pio_n'] = n
+        itypes = params.delete("pio_itypes")
         format_itypes(itypes, params)
         extract_latlng(params)
-        extract_startend(params)
+        #extract_startend(params)
         response = @connection.get(:engines, :itemsim, engine, :topn, params)
         response.body["pio_iids"]
       end
