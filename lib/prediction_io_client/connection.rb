@@ -60,7 +60,8 @@ module FM
       def setup_connection
         Faraday.new(:url => @api_url) do |connection|
           #connection.request :url_encoded
-          connection.request  :json
+          connection.request :json
+          #connection.request :retry
           
           connection.response :logger if debug?
           connection.response :raise_error
