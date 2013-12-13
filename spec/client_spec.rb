@@ -16,8 +16,12 @@ describe FM::PredictionIO::Client do
     config[:api_url]
   end
   
-  let :engine do
-    config[:engine]
+  let :itemsim_engine do
+    config[:itemsim_engine]
+  end
+  
+  let :itemrec_engine do
+    config[:itemrec_engine]
   end
   
   let :client do
@@ -196,12 +200,12 @@ describe FM::PredictionIO::Client do
     
     it 'should recommend using item similarity' do
       client.identify(uid+1)
-      expect { client.get_itemsim_top_n(engine, iid, 5) }.to raise_error Faraday::Error::ResourceNotFound
+      expect { client.get_itemsim_top_n(itemsim_engine, iid, 5) }.to raise_error Faraday::Error::ResourceNotFound
     end
     
     it 'should recommend using user recommendation' do
       client.identify(uid+1)
-      expect { client.get_itemrec_top_n(engine, 5) } .to raise_error Faraday::Error::ClientError
+      expect { client.get_itemrec_top_n(itemrec_engine, 5) }.to raise_error Faraday::Error::ClientError
     end
     
   end

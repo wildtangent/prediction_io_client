@@ -61,6 +61,8 @@ Note the tests run against a live server at present.
 ```
 api_url: "http://yourpredictionioserver.com:8000"
 api_key: "yourpredictionioserverkey"
+itemsim_engine: "your-itemsim-engine"
+itemrec_engine: "your-itemrec-engine"
 ```
 
 Then run the specs
