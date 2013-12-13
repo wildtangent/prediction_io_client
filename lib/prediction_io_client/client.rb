@@ -88,11 +88,12 @@ module FM
         itypes = params.delete("pio_itypes")
         format_itypes(itypes, params)
         extract_latlng(params)
-        #extract_startend(params)
         response = @connection.get(:engines, :itemrec, engine, :topn, params)
         response.body["pio_iids"]
       end
       
+      # Options: pio_iid, pio_n, pio_itypes, pio_latitude, pio_longitude, pio_within, pio_unit
+      # Should probably reject others!
       def get_itemsim_top_n(engine, iid, n, params={})
         params.merge!(default_params)
         params['pio_iid'] = iid
@@ -100,11 +101,16 @@ module FM
         itypes = params.delete("pio_itypes")
         format_itypes(itypes, params)
         extract_latlng(params)
-        #extract_startend(params)
         response = @connection.get(:engines, :itemsim, engine, :topn, params)
         response.body["pio_iids"]
       end
       
+      # Allowed actions: view, like, dislike, rate, conversion
+      # Optionally accepts 
+      # pio_t which is a date/time when the action took place
+      # pio_rate which is used when the rate action is specified
+      # pio_latitude, pio_longitude for location
+      # And any other params you want to set on the action as key value pairs
       def record_action_on_item(action, iid, params={})
         params.merge!(default_params)
         params['pio_action'] = action
