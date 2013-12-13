@@ -12,14 +12,18 @@ module FM
         @connection = Connection.new(@api_url, @api_format, @api_version)
       end
       
+      # Set the current user for the client. Item Recommendations will use this to scope their results
       def identify(uid)
         @uid = uid
       end
       
+      # Return the status of the Prediction.IO server instance
       def get_status
         @connection.get("/").body
       end
       
+      # Create a user by their user ID, with optional pio_latitude, pio_longitude, 
+      # pio_inactive, and any othe optional attributes
       def create_user(uid, params={})
         params.merge!(default_params)
         params['pio_uid'] = uid
@@ -27,6 +31,7 @@ module FM
         @connection.post(:users, params).body
       end
   
+      # Get a user by their user ID
       def get_user(uid)
         params = {"pio_uid" => uid}.merge(default_params)
         response = @connection.get(:users, uid, params).body
@@ -37,12 +42,14 @@ module FM
         end
         response      
       end
-      
+
+      # Delete a user by their user ID
       def delete_user(uid)
         params = {"pio_uid" => uid}.merge(default_params)
         @connection.delete(:users, uid, params).body
       end
 
+      # Create an item by id, types[] and optional attributes
       def create_item(iid, itypes, params={})
         params.merge!(default_params)
         params['pio_iid'] = iid
@@ -51,7 +58,8 @@ module FM
         extract_startend(params)
         @connection.post(:items, params).body
       end 
-      
+
+      # Get an item from the Prediction.IO server by its item id
       def get_item(iid)
         params = {'pio_iid' => iid}.merge(default_params)
         response = @connection.get(:items, iid, params).body
@@ -71,13 +79,11 @@ module FM
         response
       end
       
+      # Remove an item from the Prediction.IO server by its item id
       def delete_item(iid)
         params = {'pio_iid' => iid}.merge(default_params)
         @connection.delete(:items, iid, params).body
       end
-      
-      
-      
       
       # Options: pio_uid, pio_n, pio_itypes, pio_latitude, pio_longitude, pio_within, pio_unit
       # Should probably reject others!
@@ -123,7 +129,7 @@ module FM
       
       private
       
-      
+      # Create the correct parameter key for lat/lng from the supplied separatelat/lng params
       def extract_latlng(params)
         lat = params.delete('pio_latitude')
         lng = params.delete('pio_longitude')
@@ -131,11 +137,13 @@ module FM
         return params['pio_latlng']
       end
       
+      # Create the correct parameters for startT and endT
       def extract_startend(params)
         params["pio_startT"] = ((params["pio_startT"].to_r) * 1000).round(0).to_s if params["pio_startT"]
         params["pio_endT"] = ((params["pio_endT"].to_r) * 1000).round(0).to_s if params["pio_endT"]
       end
       
+      # Handle both string and array types
       def format_itypes(itypes, params)
         case itypes
         when Array
@@ -145,6 +153,7 @@ module FM
         end
       end
       
+      # Default params to always send with the client requests
       def default_params
         {
           "pio_appkey" => @app_key
